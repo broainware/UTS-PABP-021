@@ -530,6 +530,9 @@
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <h3 id="modalTitle">🎬 Tambah Film</h3>
+            <div id="modalError"
+                style="display:none; background:rgba(233,69,96,0.15); border:1px solid rgba(233,69,96,0.4); color:#e94560; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px;">
+            </div>
             <label>Judul Film</label>
             <input type="text" id="inputTitle" placeholder="Contoh: Interstellar" />
             <label>Genre</label>
@@ -695,7 +698,10 @@
                 status: document.getElementById('inputStatus').value,
             };
             if (!body.title || !body.genre || !body.director || !body.year) {
-                alert('Semua field wajib diisi!'); return;
+                const modalError = document.getElementById('modalError');
+                modalError.textContent = 'Semua field wajib diisi!';
+                modalError.style.display = 'block';
+                return;
             }
             const url = editingId ? `${API}/movies/${editingId}` : `${API}/movies`;
             const method = editingId ? 'PUT' : 'POST';
