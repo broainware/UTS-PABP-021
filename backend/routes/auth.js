@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Database sementara (pakai array, biar simpel dulu)
+// Database sementara 
 const users = [];
 const refreshTokens = [];
 
