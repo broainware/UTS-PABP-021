@@ -451,9 +451,9 @@
         <div class="nav-left">
             <div class="logo">Cine<span>Track</span></div>
             <div class="nav-links">
-                <a href="#" class="active">Movie</a>
-                <a href="#">Wishlist</a>
-                <a href="#">Sudah Ditonton</a>
+                <a href="#" class="active" onclick="navFilter('semua', this)">Movie</a>
+                <a href="#" onclick="navFilter('Ingin Ditonton', this)">Wishlist</a>
+                <a href="#" onclick="navFilter('Sudah Ditonton', this)">Sudah Ditonton</a>
             </div>
         </div>
         <div class="nav-right">
@@ -571,6 +571,14 @@
             '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4',
             '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'
         ];
+
+        function navFilter(filter, el) {
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            el.classList.add('active');
+            if (filter === 'semua') return renderMovies(allMovies);
+            const filtered = allMovies.filter(m => m.status === filter);
+            renderMovies(filtered);
+        }
 
         async function fetchMovies() {
             try {
