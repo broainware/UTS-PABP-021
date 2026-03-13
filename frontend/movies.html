@@ -114,7 +114,10 @@
 
         /* HERO */
         .hero {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
+                url('https://plus.unsplash.com/premium_photo-1710522706751-c2f0c76cc5fd?w=1200&q=80');
+            background-size: cover;
+            background-position: center;
             padding: 60px 40px;
             color: white;
             display: flex;
@@ -164,10 +167,17 @@
 
         .stat {
             text-align: center;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.5);
             padding: 20px 28px;
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: white;
+            margin-top: 4px;
         }
 
         .stat-number {
