@@ -1,101 +1,230 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - CineTrack</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0d0d0d;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .card {
-      background: #1a1a2e;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      width: 100%;
-      max-width: 400px;
-      border: 1px solid #e94560;
-    }
-    h1 { text-align: center; color: #e94560; margin-bottom: 8px; font-size: 28px; }
-    p.subtitle { text-align: center; color: #888; margin-bottom: 28px; font-size: 14px; }
-    label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; color: #ccc; }
-    input {
-      width: 100%; padding: 10px 14px;
-      background: #16213e;
-      border: 1px solid #333; border-radius: 8px;
-      font-size: 14px; margin-bottom: 18px;
-      color: white; outline: none; transition: border 0.2s;
-    }
-    input:focus { border-color: #e94560; }
-    button {
-      width: 100%; padding: 12px;
-      background: #e94560; color: white;
-      border: none; border-radius: 8px;
-      font-size: 15px; font-weight: 600;
-      cursor: pointer; transition: background 0.2s;
-    }
-    button:hover { background: #c73652; }
-    .link { text-align: center; margin-top: 18px; font-size: 14px; color: #888; }
-    .link a { color: #e94560; font-weight: 600; text-decoration: none; }
-    .error {
-      background: #2d0a0a; color: #e94560;
-      padding: 10px; border-radius: 8px;
-      font-size: 13px; margin-bottom: 16px; display: none;
-      border: 1px solid #e94560;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <title>Login - CineTrack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .bg {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+                url('https://plus.unsplash.com/premium_photo-1710522706751-c2f0c76cc5fd?w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 48px 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: #e94560;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ccc;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            font-size: 14px;
+            color: white;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input::placeholder {
+            color: #555;
+        }
+
+        input:focus {
+            border-color: #e94560;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .toggle-pw {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+            color: #aaa;
+        }
+
+        .toggle-pw:hover {
+            color: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+            margin-top: 4px;
+        }
+
+        button:hover {
+            background: #c73652;
+            transform: translateY(-1px);
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .link a {
+            color: #e94560;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .error {
+            background: rgba(233, 69, 96, 0.15);
+            border: 1px solid rgba(233, 69, 96, 0.4);
+            color: #e94560;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="card">
-    <h1>🎬 CineTrack</h1>
-    <p class="subtitle">Login untuk kelola koleksi filmmu</p>
-    <div class="error" id="errorMsg"></div>
-    <label>Username</label>
-    <input type="text" id="username" placeholder="Masukkan username" />
-    <label>Password</label>
-    <input type="password" id="password" placeholder="Masukkan password" />
-    <button onclick="login()">Login</button>
-    <div class="link">Belum punya akun? <a href="register.html">Daftar di sini</a></div>
-  </div>
+    <div class="bg"></div>
+    <div class="card">
+        <div class="logo">🎬 Cine<span>Track</span></div>
+        <p class="subtitle">Login untuk kelola koleksi filmmu</p>
+        <div class="error" id="errorMsg"></div>
+        <label>Username</label>
+        <div class="input-wrapper">
+            <input type="text" id="username" placeholder="Masukkan username" />
+        </div>
+        <label>Password</label>
+        <div class="input-wrapper">
+            <input type="password" id="password" placeholder="Masukkan password" />
+            <span class="toggle-pw" onclick="togglePw()" id="toggleIcon">
+                <i class="fa-regular fa-eye-slash"></i>
+            </span>
+        </div>
+        <button onclick="login()">Login</button>
+        <div class="link">Belum punya akun? <a href="register.html">Daftar di sini</a></div>
+    </div>
 
-  <script>
-    async function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const errorMsg = document.getElementById('errorMsg');
-      errorMsg.style.display = 'none';
+    <script>
+        function togglePw() {
+            const input = document.getElementById('password');
+            const icon = document.getElementById('toggleIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = '<i class="fa-regular fa-eye"></i>';
+            } else {
+                input.type = 'password';
+                icon.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
+            }
+        }
 
-      if (!username || !password) {
-        errorMsg.textContent = 'Username dan password wajib diisi';
-        errorMsg.style.display = 'block';
-        return;
-      }
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.style.display = 'none';
 
-      try {
-        const res = await fetch('http://localhost:5000/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message);
+            if (!username || !password) {
+                errorMsg.textContent = 'Username dan password wajib diisi';
+                errorMsg.style.display = 'block';
+                return;
+            }
 
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        localStorage.setItem('username', username);
-        window.location.href = 'movies.html';
-      } catch (err) {
-        errorMsg.textContent = err.message;
-        errorMsg.style.display = 'block';
-      }
-    }
-  </script>
+            try {
+                const res = await fetch('http://localhost:5000/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+
+                localStorage.setItem('accessToken', data.accessToken);
+                localStorage.setItem('refreshToken', data.refreshToken);
+                localStorage.setItem('username', username);
+                window.location.href = 'movies.html';
+            } catch (err) {
+                errorMsg.textContent = err.message;
+                errorMsg.style.display = 'block';
+            }
+        }
+    </script>
 </body>
+
 </html>
