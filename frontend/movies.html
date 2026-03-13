@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Koleksi Film - CineTrack</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d0d0d;
+      color: white;
+      min-height: 100vh;
+    }
+    nav {
+      background: #1a1a2e;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e94560;
+    }
+    nav h1 { color: #e94560; font-size: 22px; }
+    nav div { display: flex; align-items: center; gap: 16px; }
+    nav span { color: #888; font-size: 14px; }
+    .btn-logout {
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid #e94560;
+      color: #e94560;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: #e94560; color: white; }
+    .container { max-width: 900px; margin: 32px auto; padding: 0 24px; }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .top-bar h2 { font-size: 20px; color: #ccc; }
+    .btn-add {
+      padding: 10px 20px;
+      background: #e94560;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn-add:hover { background: #c73652; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: #1a1a2e;
+      padding: 32px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 460px;
+      border: 1px solid #e94560;
+    }
+    .modal h3 { color: #e94560; margin-bottom: 20px; font-size: 18px; }
+    .modal label { display: block; margin-bottom: 6px; font-size: 13px; color: #ccc; font-weight: 600; }
+    .modal input, .modal select {
+      width: 100%; padding: 10px 14px;
+      background: #16213e;
+      border: 1px solid #333; border-radius: 8px;
+      font-size: 14px; margin-bottom: 16px;
+      color: white; outline: none;
+    }
+    .modal input:focus, .modal select:focus { border-color: #e94560; }
+    .modal select option { background: #16213e; }
+    .modal-buttons { display: flex; gap: 12px; margin-top: 8px; }
+    .btn-save {
+      flex: 1; padding: 11px;
+      background: #e94560; color: white;
+      border: none; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-save:hover { background: #c73652; }
+    .btn-cancel {
+      flex: 1; padding: 11px;
+      background: transparent; color: #888;
+      border: 1px solid #333; border-radius: 8px;
+      font-size: 14px; cursor: pointer;
+    }
+    .btn-cancel:hover { border-color: #888; color: white; }
+
+    /* MOVIE CARDS */
+    .movies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .movie-card {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #222;
+      transition: border 0.2s;
+    }
+    .movie-card:hover { border-color: #e94560; }
+    .movie-title { font-size: 16px; font-weight: 700; color: white; margin-bottom: 8px; }
+    .movie-info { font-size: 13px; color: #888; margin-bottom: 4px; }
+    .movie-info span { color: #ccc; }
+    .badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge.sudah { background: #0a2d1a; color: #2ecc71; border: 1px solid #2ecc71; }
+    .badge.ingin { background: #2d1a0a; color: #f39c12; border: 1px solid #f39c12; }
+    .badge.sedang { background: #0a1a2d; color: #3498db; border: 1px solid #3498db; }
+    .card-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-edit {
+      flex: 1; padding: 7px;
+      background: transparent;
+      border: 1px solid #3498db;
+      color: #3498db; border-radius: 6px;
+      cursor: pointer; font-size: 13px;
+      transition: all 0.2s;
+    }
+    .btn-edit:hover { background: #3498db; color: white; }
+    .btn-delete {
+      flex: 1; padding: 7px;
+      background: transparent;
+      border: 1px solid #e94560;
+      color: #e94560; border-radius: 6px;
+      cursor: pointer; font-size: 13px;
+      transition: all 0.2s;
+    }
+    .btn-delete:hover { background: #e94560; color: white; }
+    .empty {
+      text-align: center; color: #555;
+      padding: 60px 0; font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <h1>🎬 CineTrack</h1>
+    <div>
+      <span id="welcomeText"></span>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="top-bar">
+      <h2>Koleksi Film Saya</h2>
+      <button class="btn-add" onclick="openModal()">+ Tambah Film</button>
+    </div>
+    <div class="movies-grid" id="moviesGrid">
+      <div class="empty">Belum ada film. Tambahkan film pertamamu!</div>
+    </div>
+  </div>
+
+  <!-- MODAL TAMBAH / EDIT -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h3 id="modalTitle">Tambah Film</h3>
+      <label>Judul Film</label>
+      <input type="text" id="inputTitle" placeholder="Contoh: Interstellar" />
+      <label>Genre</label>
+      <input type="text" id="inputGenre" placeholder="Contoh: Sci-Fi, Drama, Action" />
+      <label>Sutradara</label>
+      <input type="text" id="inputDirector" placeholder="Contoh: Christopher Nolan" />
+      <label>Tahun Rilis</label>
+      <input type="number" id="inputYear" placeholder="Contoh: 2014" />
+      <label>Status Tonton</label>
+      <select id="inputStatus">
+        <option value="Ingin Ditonton">Ingin Ditonton</option>
+        <option value="Sedang Ditonton">Sedang Ditonton</option>
+        <option value="Sudah Ditonton">Sudah Ditonton</option>
+      </select>
+      <div class="modal-buttons">
+        <button class="btn-cancel" onclick="closeModal()">Batal</button>
+        <button class="btn-save" onclick="saveMovie()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:5000';
+    let editingId = null;
+
+    // Cek login
+    const token = localStorage.getItem('accessToken');
+    if (!token) window.location.href = 'index.html';
+
+    // Tampilkan username
+    const username = localStorage.getItem('username') || 'User';
+    document.getElementById('welcomeText').textContent = `Halo, ${username} 👋`;
+
+    // Ambil semua film
+    async function fetchMovies() {
+      try {
+        const res = await fetch(`${API}/movies`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.status === 401 || res.status === 403) {
+          window.location.href = 'index.html';
+          return;
+        }
+        const movies = await res.json();
+        renderMovies(movies);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Render kartu film
+    function renderMovies(movies) {
+      const grid = document.getElementById('moviesGrid');
+      if (movies.length === 0) {
+        grid.innerHTML = '<div class="empty">Belum ada film. Tambahkan film pertamamu!</div>';
+        return;
+      }
+      grid.innerHTML = movies.map(m => {
+        const badgeClass = m.status === 'Sudah Ditonton' ? 'sudah'
+          : m.status === 'Sedang Ditonton' ? 'sedang' : 'ingin';
+        return `
+          <div class="movie-card">
+            <div class="movie-title">${m.title}</div>
+            <div class="movie-info">🎭 Genre: <span>${m.genre}</span></div>
+            <div class="movie-info">🎬 Sutradara: <span>${m.director}</span></div>
+            <div class="movie-info">📅 Tahun: <span>${m.year}</span></div>
+            <span class="badge ${badgeClass}">${m.status}</span>
+            <div class="card-actions">
+              <button class="btn-edit" onclick="openEdit(${m.id}, '${m.title}', '${m.genre}', '${m.director}', ${m.year}, '${m.status}')">✏️ Edit</button>
+              <button class="btn-delete" onclick="deleteMovie(${m.id})">🗑️ Hapus</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Buka modal tambah
+    function openModal() {
+      editingId = null;
+      document.getElementById('modalTitle').textContent = 'Tambah Film';
+      document.getElementById('inputTitle').value = '';
+      document.getElementById('inputGenre').value = '';
+      document.getElementById('inputDirector').value = '';
+      document.getElementById('inputYear').value = '';
+      document.getElementById('inputStatus').value = 'Ingin Ditonton';
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    // Buka modal edit
+    function openEdit(id, title, genre, director, year, status) {
+      editingId = id;
+      document.getElementById('modalTitle').textContent = 'Edit Film';
+      document.getElementById('inputTitle').value = title;
+      document.getElementById('inputGenre').value = genre;
+      document.getElementById('inputDirector').value = director;
+      document.getElementById('inputYear').value = year;
+      document.getElementById('inputStatus').value = status;
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    // Simpan film (tambah atau edit)
+    async function saveMovie() {
+      const body = {
+        title: document.getElementById('inputTitle').value,
+        genre: document.getElementById('inputGenre').value,
+        director: document.getElementById('inputDirector').value,
+        year: parseInt(document.getElementById('inputYear').value),
+        status: document.getElementById('inputStatus').value,
+      };
+
+      if (!body.title || !body.genre || !body.director || !body.year) {
+        alert('Semua field wajib diisi!');
+        return;
+      }
+
+      const url = editingId ? `${API}/movies/${editingId}` : `${API}/movies`;
+      const method = editingId ? 'PUT' : 'POST';
+
+      try {
+        const res = await fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) throw new Error('Gagal menyimpan');
+        closeModal();
+        fetchMovies();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    // Hapus film
+    async function deleteMovie(id) {
+      if (!confirm('Yakin ingin menghapus film ini?')) return;
+      try {
+        await fetch(`${API}/movies/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        fetchMovies();
+      } catch (err) {
+        alert('Gagal menghapus');
+      }
+    }
+
+    // Logout
+    function logout() {
+      const refreshToken = localStorage.getItem('refreshToken');
+      fetch(`${API}/auth/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: refreshToken })
+      });
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+
+    // Load film saat halaman dibuka
+    fetchMovies();
+  </script>
+</body>
+</html>

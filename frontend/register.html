@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - CineTrack</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d0d0d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #1a1a2e;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid #e94560;
+    }
+    h1 { text-align: center; color: #e94560; margin-bottom: 8px; font-size: 28px; }
+    p.subtitle { text-align: center; color: #888; margin-bottom: 28px; font-size: 14px; }
+    label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; color: #ccc; }
+    input {
+      width: 100%; padding: 10px 14px;
+      background: #16213e;
+      border: 1px solid #333; border-radius: 8px;
+      font-size: 14px; margin-bottom: 18px;
+      color: white; outline: none; transition: border 0.2s;
+    }
+    input:focus { border-color: #e94560; }
+    button {
+      width: 100%; padding: 12px;
+      background: #e94560; color: white;
+      border: none; border-radius: 8px;
+      font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    button:hover { background: #c73652; }
+    .link { text-align: center; margin-top: 18px; font-size: 14px; color: #888; }
+    .link a { color: #e94560; font-weight: 600; text-decoration: none; }
+    .error {
+      background: #2d0a0a; color: #e94560;
+      padding: 10px; border-radius: 8px;
+      font-size: 13px; margin-bottom: 16px; display: none;
+      border: 1px solid #e94560;
+    }
+    .success {
+      background: #0a2d0a; color: #2ecc71;
+      padding: 10px; border-radius: 8px;
+      font-size: 13px; margin-bottom: 16px; display: none;
+      border: 1px solid #2ecc71;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🎬 CineTrack</h1>
+    <p class="subtitle">Buat akun baru</p>
+    <div class="error" id="errorMsg"></div>
+    <div class="success" id="successMsg"></div>
+    <label>Username</label>
+    <input type="text" id="username" placeholder="Masukkan username" />
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Masukkan password" />
+    <label>Konfirmasi Password</label>
+    <input type="password" id="confirmPassword" placeholder="Ulangi password" />
+    <button onclick="register()">Daftar</button>
+    <div class="link">Sudah punya akun? <a href="index.html">Login di sini</a></div>
+  </div>
+
+  <script>
+    async function register() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const errorMsg = document.getElementById('errorMsg');
+      const successMsg = document.getElementById('successMsg');
+
+      errorMsg.style.display = 'none';
+      successMsg.style.display = 'none';
+
+      if (!username || !password || !confirmPassword) {
+        errorMsg.textContent = 'Semua field wajib diisi';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        errorMsg.textContent = 'Password tidak cocok';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      try {
+        const res = await fetch('http://localhost:5000/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+
+        successMsg.textContent = 'Registrasi berhasil! Silakan login.';
+        successMsg.style.display = 'block';
+        setTimeout(() => window.location.href = 'index.html', 2000);
+      } catch (err) {
+        errorMsg.textContent = err.message;
+        errorMsg.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
