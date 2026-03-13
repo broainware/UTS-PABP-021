@@ -349,24 +349,28 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.15);
             justify-content: center;
             align-items: center;
             z-index: 100;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
         }
 
         .modal-overlay.active {
             display: flex;
         }
 
+
         .modal {
-            background: white;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             padding: 32px;
             border-radius: 20px;
             width: 100%;
             max-width: 460px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
         }
 
         .modal h3 {
@@ -379,7 +383,7 @@
             display: block;
             margin-bottom: 6px;
             font-size: 13px;
-            color: #555;
+            color: #333;
             font-weight: 600;
         }
 
@@ -387,26 +391,29 @@
         .modal select {
             width: 100%;
             padding: 10px 14px;
-            border: 1px solid #eee;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             font-size: 14px;
             margin-bottom: 14px;
             color: #333;
             outline: none;
-            background: #fafafa;
             transition: border 0.2s;
+        }
+
+        .modal input::placeholder {
+            color: #999;
         }
 
         .modal input:focus,
         .modal select:focus {
             border-color: #e94560;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
         }
 
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
+        .modal select option {
+            background: white;
+            color: #333;
         }
 
         .btn-save {
