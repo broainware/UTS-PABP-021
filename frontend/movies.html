@@ -492,17 +492,19 @@
     <div class="content">
         <div class="section-title">Koleksi Film Saya</div>
         <div class="filters" id="filterButtons">
-            <button class="filter-btn active" onclick="filterMovies('semua', this)">🎬 Semua</button>
-            <button class="filter-btn" onclick="filterMovies('Sudah Ditonton', this)">✅ Sudah Ditonton</button>
-            <button class="filter-btn" onclick="filterMovies('Sedang Ditonton', this)">▶️ Sedang Ditonton</button>
-            <button class="filter-btn" onclick="filterMovies('Ingin Ditonton', this)">🔖 Ingin Ditonton</button>
-            <button class="filter-btn" onclick="filterMovies('Sci-Fi', this)">🚀 Sci-Fi</button>
-            <button class="filter-btn" onclick="filterMovies('Drama', this)">🎭 Drama</button>
-            <button class="filter-btn" onclick="filterMovies('Action', this)">💥 Action</button>
-            <button class="filter-btn" onclick="filterMovies('Thriller', this)">😱 Thriller</button>
-            <button class="filter-btn" onclick="filterMovies('Horror', this)">👻 Horror</button>
-            <button class="filter-btn" onclick="filterMovies('Romance', this)">💕 Romance</button>
-            <button class="filter-btn" onclick="filterMovies('Animasi', this)">✨ Animasi</button>
+            <button class="filter-btn active" onclick="filterMovies('semua', this)">Semua</button>
+            <button class="filter-btn" onclick="filterMovies('Sudah Ditonton', this)">Sudah Ditonton</button>
+            <button class="filter-btn" onclick="filterMovies('Sedang Ditonton', this)">Sedang Ditonton</button>
+            <button class="filter-btn" onclick="filterMovies('Ingin Ditonton', this)">Ingin Ditonton</button>
+            <button class="filter-btn" onclick="filterMovies('Sci-Fi', this)">Sci-Fi</button>
+            <button class="filter-btn" onclick="filterMovies('Drama', this)">Drama</button>
+            <button class="filter-btn" onclick="filterMovies('Action', this)">Action</button>
+            <button class="filter-btn" onclick="filterMovies('Thriller', this)">Thriller</button>
+            <button class="filter-btn" onclick="filterMovies('Horror', this)">Horror</button>
+            <button class="filter-btn" onclick="filterMovies('Romance', this)">Romance</button>
+            <button class="filter-btn" onclick="filterMovies('Animasi', this)">Animasi</button>
+            <button class="filter-btn" onclick="filterMovies('Komedi', this)">Komedi</button>
+            <button class="filter-btn" onclick="filterMovies('Dokumenter', this)">Dokumenter</button>
         </div>
         <div class="movies-grid" id="moviesGrid"></div>
     </div>
@@ -515,15 +517,15 @@
             <input type="text" id="inputTitle" placeholder="Contoh: Interstellar" />
             <label>Genre</label>
             <select id="inputGenre">
-                <option value="Action">💥 Action</option>
-                <option value="Animasi">✨ Animasi</option>
-                <option value="Drama">🎭 Drama</option>
-                <option value="Horror">👻 Horror</option>
-                <option value="Komedi">😂 Komedi</option>
-                <option value="Romance">💕 Romance</option>
-                <option value="Sci-Fi">🚀 Sci-Fi</option>
-                <option value="Thriller">😱 Thriller</option>
-                <option value="Dokumenter">📽️ Dokumenter</option>
+                <option value="Action">Action</option>
+                <option value="Animasi">Animasi</option>
+                <option value="Drama">Drama</option>
+                <option value="Horror">Horror</option>
+                <option value="Komedi">Komedi</option>
+                <option value="Romance">Romance</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Thriller">Thriller</option>
+                <option value="Dokumenter">Dokumenter</option>
             </select>
             <label>Sutradara</label>
             <input type="text" id="inputDirector" placeholder="Contoh: Christopher Nolan" />
@@ -554,10 +556,16 @@
         document.getElementById('welcomeText').textContent = username;
         document.getElementById('avatarText').textContent = username.charAt(0).toUpperCase();
 
-        const genreEmoji = {
-            'Sci-Fi': '🚀', 'Drama': '🎭', 'Action': '💥',
-            'Thriller': '😱', 'Horror': '👻', 'Romance': '💕',
-            'Animasi': '✨', 'Komedi': '😂', 'Dokumenter': '📽️'
+        const genreImage = {
+            'Action': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80',
+            'Animasi': 'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&q=80',
+            'Drama': 'https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=400&q=80',
+            'Horror': 'https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=400&q=80',
+            'Komedi': 'https://images.unsplash.com/photo-1527224538127-2104bb71c51b?w=400&q=80',
+            'Romance': 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=400&q=80',
+            'Sci-Fi': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=80',
+            'Thriller': 'https://images.unsplash.com/photo-1520034475321-cbe63696469a?w=400&q=80',
+            'Dokumenter': 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?w=400&q=80',
         };
         const posterColors = [
             '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4',
@@ -603,13 +611,14 @@
             }
             grid.innerHTML = movies.map((m, i) => {
                 const color = posterColors[i % posterColors.length];
-                const emoji = genreEmoji[m.genre] || '🎬';
+                const img = genreImage[m.genre] || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=80';
                 const badgeClass = m.status === 'Sudah Ditonton' ? 'sudah'
                     : m.status === 'Sedang Ditonton' ? 'sedang' : 'ingin';
                 return `
           <div class="movie-card">
-            <div class="movie-poster" style="background: linear-gradient(135deg, ${color}33, ${color}66)">
-              <span style="font-size:56px">${emoji}</span>
+           <div class="movie-poster" style="background-image: url('${img}'); background-size: cover; background-position: center;">
+            <div style="position:absolute;inset:0;background:rgba(0,0,0,0.3);border-radius:0"></div>
+            <span style="position:relative;font-size:13px;font-weight:700;color:white;padding:4px 8px;background:rgba(0,0,0,0.5);border-radius:4px">${m.genre}</span>
             </div>
             <div class="movie-body">
               <div class="movie-title">${m.title}</div>
@@ -618,8 +627,8 @@
               <span class="badge ${badgeClass}">${m.status}</span>
             </div>
             <div class="card-actions">
-              <button class="btn-edit" onclick="openEdit(${m.id}, '${m.title}', '${m.genre}', '${m.director}', ${m.year}, '${m.status}')">✏️ Edit</button>
-              <button class="btn-delete" onclick="deleteMovie(${m.id})">🗑️ Hapus</button>
+              <button class="btn-edit" onclick="openEdit(${m.id}, '${m.title}', '${m.genre}', '${m.director}', ${m.year}, '${m.status}')">Edit</button>
+              <button class="btn-delete" onclick="deleteMovie(${m.id})">Hapus</button>
             </div>
           </div>
         `;
