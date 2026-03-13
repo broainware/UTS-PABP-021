@@ -448,6 +448,18 @@
         }
     </style>
 </head>
+<!-- MODAL KONFIRMASI HAPUS -->
+<div class="modal-overlay" id="deleteOverlay">
+    <div class="modal" style="max-width:360px; text-align:center">
+        <div style="font-size:40px; margin-bottom:16px">🗑️</div>
+        <h3 style="margin-bottom:8px">Hapus Film?</h3>
+        <p style="color:#aaa; font-size:14px; margin-bottom:24px">Film yang dihapus tidak bisa dikembalikan.</p>
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeDelete()">Batal</button>
+            <button class="btn-save" id="btnConfirmDelete">Hapus</button>
+        </div>
+    </div>
+</div>
 
 <body>
 
@@ -702,17 +714,29 @@
             } catch (err) { alert(err.message); }
         }
 
-        async function deleteMovie(id) {
-            if (!confirm('Yakin ingin menghapus film ini?')) return;
+        let deleteTargetId = null;
+
+        function deleteMovie(id) {
+            deleteTargetId = id;
+            document.getElementById('deleteOverlay').classList.add('active');
+        }
+
+        function closeDelete() {
+            deleteTargetId = null;
+            document.getElementById('deleteOverlay').classList.remove('active');
+        }
+
+        document.getElementById('btnConfirmDelete').addEventListener('click', async () => {
+            if (!deleteTargetId) return;
             try {
-                await fetch(`${API}/movies/${id}`, {
+                await fetch(`${API}/movies/${deleteTargetId}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
+                closeDelete();
                 fetchMovies();
             } catch (err) { alert('Gagal menghapus'); }
-        }
-
+        });
         function logout() {
             const refreshToken = localStorage.getItem('refreshToken');
             fetch(`${API}/auth/logout`, {
